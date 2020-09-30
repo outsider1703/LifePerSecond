@@ -14,10 +14,11 @@
 		FA71695225194FFE00A83ECB /* LifePerSecond.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA71695025194FFE00A83ECB /* LifePerSecond.xcdatamodeld */; };
 		FA7169542519500500A83ECB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA7169532519500500A83ECB /* Assets.xcassets */; };
 		FA7169572519500500A83ECB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA7169552519500500A83ECB /* LaunchScreen.storyboard */; };
-		FA74B9E9251D2D2F001A3616 /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9E8251D2D2F001A3616 /* ToDoListViewController.swift */; };
 		FA74B9EC251D3AA1001A3616 /* DealForToDoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9EB251D3AA1001A3616 /* DealForToDoListCollectionViewCell.swift */; };
 		FA74B9F2251E5EE6001A3616 /* BarChartStatiscticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F1251E5EE6001A3616 /* BarChartStatiscticViewController.swift */; };
 		FA74B9F4251E5F0A001A3616 /* PieChartStatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F3251E5F0A001A3616 /* PieChartStatisticViewController.swift */; };
+		FA74B9F6252221F4001A3616 /* InformationForCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F5252221F4001A3616 /* InformationForCellViewController.swift */; };
+		FA74B9F82524618D001A3616 /* ToDoListCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F72524618D001A3616 /* ToDoListCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,10 +33,11 @@
 		FA7169532519500500A83ECB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA7169562519500500A83ECB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA7169582519500500A83ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FA74B9E8251D2D2F001A3616 /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
 		FA74B9EB251D3AA1001A3616 /* DealForToDoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealForToDoListCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA74B9F1251E5EE6001A3616 /* BarChartStatiscticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartStatiscticViewController.swift; sourceTree = "<group>"; };
 		FA74B9F3251E5F0A001A3616 /* PieChartStatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartStatisticViewController.swift; sourceTree = "<group>"; };
+		FA74B9F5252221F4001A3616 /* InformationForCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationForCellViewController.swift; sourceTree = "<group>"; };
+		FA74B9F72524618D001A3616 /* ToDoListCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,10 +111,11 @@
 			isa = PBXGroup;
 			children = (
 				FA71694B25194FFE00A83ECB /* BBBViewController.swift */,
-				FA74B9E8251D2D2F001A3616 /* ToDoListViewController.swift */,
+				FA74B9F72524618D001A3616 /* ToDoListCollectionViewController.swift */,
 				FA74B9EB251D3AA1001A3616 /* DealForToDoListCollectionViewCell.swift */,
 				FA74B9F3251E5F0A001A3616 /* PieChartStatisticViewController.swift */,
 				FA74B9F1251E5EE6001A3616 /* BarChartStatiscticViewController.swift */,
+				FA74B9F5252221F4001A3616 /* InformationForCellViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -259,11 +262,12 @@
 			files = (
 				FA74B9F4251E5F0A001A3616 /* PieChartStatisticViewController.swift in Sources */,
 				FA74B9EC251D3AA1001A3616 /* DealForToDoListCollectionViewCell.swift in Sources */,
+				FA74B9F82524618D001A3616 /* ToDoListCollectionViewController.swift in Sources */,
 				FA74B9F2251E5EE6001A3616 /* BarChartStatiscticViewController.swift in Sources */,
 				FA71694C25194FFE00A83ECB /* BBBViewController.swift in Sources */,
 				FA71695225194FFE00A83ECB /* LifePerSecond.xcdatamodeld in Sources */,
 				FA71694825194FFE00A83ECB /* AppDelegate.swift in Sources */,
-				FA74B9E9251D2D2F001A3616 /* ToDoListViewController.swift in Sources */,
+				FA74B9F6252221F4001A3616 /* InformationForCellViewController.swift in Sources */,
 				FA71694A25194FFE00A83ECB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

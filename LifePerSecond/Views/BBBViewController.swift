@@ -10,7 +10,6 @@ import UIKit
 
 class BigBlackButtonViewController: UIViewController {
     
-    
     private let bigBlackButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
@@ -38,7 +37,12 @@ class BigBlackButtonViewController: UIViewController {
     }
     
     @objc func goToDoList() {
-        let toDoVC = ToDoListViewController()
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: view.frame.width, height: (view.frame.height) / 10)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        let toDoVC = ToDoListCollectionViewController(collectionViewLayout: layout)
         present(UINavigationController(rootViewController: toDoVC), animated: true)
     }
     @objc func goToStatisticsVC() {

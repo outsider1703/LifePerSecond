@@ -18,13 +18,15 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
         return label
     }()
     let startButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("START", for: .normal)
+        button.addTarget(self, action: #selector(startButtonAction), for: .touchUpInside)
         return button
     }()
     let stopButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("STOP", for: .normal)
+        button.addTarget(self, action: #selector(stopButtonAction), for: .touchUpInside)
         return button
     }()
     let timerLabel: UILabel = {
@@ -33,32 +35,44 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-
+    
+    @objc func startButtonAction() {
+        startButton.isHidden = true
+        stopButton.isHidden = false
+        print("Start")
+    }
+    
+    @objc func stopButtonAction() {
+        stopButton.isHidden = true
+        startButton.isHidden = false
+        print("Stop")
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         stopButton.isHidden = true
         
-        setUpView()
+        setUpViews()
     }
     
-    private func setUpView() {
-        self.addSubview(nameDealLabel)
+    private func setUpViews() {
+        addSubview(nameDealLabel)
         nameDealLabel.snp.makeConstraints { (make) in
-            make.width.equalTo(self.frame.width / 2)
+            make.width.equalTo(frame.width / 2)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.leading.equalTo(8)
         }
-        self.addSubview(timerLabel)
+        addSubview(timerLabel)
         timerLabel.snp.makeConstraints { (make) in
-            make.width.equalTo(self.frame.width / 6)
+            make.width.equalTo(frame.width / 6)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.trailing.equalTo(-80)
         }
-        self.addSubview(startButton)
+        addSubview(startButton)
         startButton.snp.makeConstraints { (make) in
-            make.width.equalTo(self.frame.width / 6)
+            make.width.equalTo(frame.width / 6)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.trailing.equalTo(-8)
