@@ -10,6 +10,8 @@ import UIKit
 
 class ToDoListCollectionViewController: UICollectionViewController {
     
+    var toDoList: [Task] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,21 +21,27 @@ class ToDoListCollectionViewController: UICollectionViewController {
         collectionView.register(DealForToDoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DealForToDoListCollectionViewCell.reuseId)
         settingNavigation()
+        toDoList = CoreDataManager.shared.fetchData()
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let informationVC = InformationForCellViewController()
+        
+        informationVC.preparePersonalCellFor(task: toDoList[indexPath.item])
+                
         present(UINavigationController(rootViewController: informationVC), animated: true)
     }
-    
+        
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return toDoList.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DealForToDoListCollectionViewCell.reuseId,
                                                       for: indexPath) as! DealForToDoListCollectionViewCell
+        cell.preparePersonalCellFor(task: toDoList[indexPath.item])
+        //cell.setNameForCell(toDoList[indexPath.item].name ?? "error name")
         
         return cell
     }
@@ -68,10 +76,27 @@ class ToDoListCollectionViewController: UICollectionViewController {
         addNewDealAlert(title: "New Goals")
     }
     
+}
+
+//MARK: - Alert
+extension ToDoListCollectionViewController {
+    
     private func addNewDealAlert(title: String) {
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
         
-        let saveAction = UIAlertAction(title: "Save", style: .default)
+        let saveAction = UIAlertAction(title: "Achieve This", style: .default) { [unowned self] _ in
+            guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }
+            
+            guard let taskObjectforData = CoreDataManager.shared.getAnObject() else { return }
+            taskObjectforData.name = task
+            
+            self.toDoList.append(taskObjectforData)
+            
+            let indexPath = IndexPath(row: self.toDoList.count - 1, section: 0)
+            self.collectionView.insertItems(at: [indexPath])
+            
+            CoreDataManager.shared.save(taskObjectforData)
+        }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         
         alert.addAction(saveAction)
@@ -80,6 +105,6 @@ class ToDoListCollectionViewController: UICollectionViewController {
         
         present(alert, animated: true)
     }
-    
 }
+
 

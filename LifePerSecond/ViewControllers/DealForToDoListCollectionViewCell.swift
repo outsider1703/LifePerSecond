@@ -12,24 +12,38 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
     
     static let reuseId = "Cell"
     
-    let nameDealLabel: UILabel = {
+    private var personalTaskForCell: Task!
+        
+    private var timer: Timer?
+    private var timerCounter: Int64 = 0 {
+        didSet {
+            if timerCounter < 60 {
+                timerLabel.text = String(timerCounter)
+            } else {
+                let minuts = timerCounter / 60
+                timerLabel.text = "\(minuts):\(timerCounter % 60)"
+            }
+        }
+    }
+    
+    private let nameDealLabel: UILabel = {
         let label = UILabel()
-        label.text = "NAME"
+        label.text = "Name"
         return label
     }()
-    let startButton: UIButton = {
+    private let startButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("START", for: .normal)
         button.addTarget(self, action: #selector(startButtonAction), for: .touchUpInside)
         return button
     }()
-    let stopButton: UIButton = {
+    private let stopButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("STOP", for: .normal)
         button.addTarget(self, action: #selector(stopButtonAction), for: .touchUpInside)
         return button
     }()
-    let timerLabel: UILabel = {
+    private let timerLabel: UILabel = {
         let label = UILabel()
         label.text = "Time"
         label.textAlignment = .center
@@ -39,13 +53,16 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
     @objc func startButtonAction() {
         startButton.isHidden = true
         stopButton.isHidden = false
-        print("Start")
+        
+        startTimer()
     }
     
     @objc func stopButtonAction() {
         stopButton.isHidden = true
         startButton.isHidden = false
-        print("Stop")
+        
+        CoreDataManager.shared.updateTime(personalTaskForCell, newTime: timerCounter)
+        stopTimer()
     }
     
     override init(frame: CGRect) {
@@ -89,5 +106,30 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+//MARK:- Timer
+extension DealForToDoListCollectionViewCell {
+    private func startTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0,
+                                     target: self,
+                                     selector: #selector(updateTimer),
+                                     userInfo: nil,
+                                     repeats: true)
+    }
+    @objc func updateTimer() { timerCounter += 1 }
     
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+        timerCounter = 0
+    }
+}
+//MARK:- Puplic Function for Setting UI  {{{
+extension DealForToDoListCollectionViewCell {
+    
+    func preparePersonalCellFor(task: Task) {
+        personalTaskForCell = task
+        nameDealLabel.text = task.name
+    }
+    //MARK:- }}} Подумать как можно избежать передачи всего объекта для обнавления времени и стоит ли вообще
 }

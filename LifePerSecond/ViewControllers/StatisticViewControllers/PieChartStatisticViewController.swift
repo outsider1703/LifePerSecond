@@ -10,11 +10,17 @@ import UIKit
 
 class PieChartStatisticViewController: UIViewController {
     
+    private let statisticsDateSegmentedControl: UISegmentedControl = {
+        let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
+        return segment
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemYellow
         setUpNavigation()
+        setupViews()
     }
     
     private func setUpNavigation() {
@@ -26,4 +32,14 @@ class PieChartStatisticViewController: UIViewController {
     @objc func backButtonAction() {
         dismiss(animated: true)
     }
+    
+    private func setupViews() {
+        view.addSubview(statisticsDateSegmentedControl)
+        statisticsDateSegmentedControl.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(98)
+            make.leading.equalTo(8)
+            make.trailing.equalTo(-8)
+        }
+    }
+    
 }

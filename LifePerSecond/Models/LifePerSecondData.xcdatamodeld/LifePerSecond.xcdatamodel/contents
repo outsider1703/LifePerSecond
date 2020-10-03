@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Task" representedClassName="Task" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="setTimeAndDate" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TimeAndDate" inverseName="task" inverseEntity="TimeAndDate"/>
+    </entity>
+    <entity name="TimeAndDate" representedClassName="TimeAndDate" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeCounter" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="setTimeAndDate" inverseEntity="Task"/>
+    </entity>
+    <elements>
+        <element name="Task" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="TimeAndDate" positionX="-54" positionY="-9" width="128" height="88"/>
+    </elements>
+</model>
