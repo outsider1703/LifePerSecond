@@ -10,21 +10,30 @@ import UIKit
 
 class InformationForCellViewController: UIViewController {
     
+    private let timeSetterManaager = TimeSetterManager()
     private var personalTaskForCell: Task!
+    
+    private var allTime: Int64 {
+        get { timeSetterManaager.getAllTimeFor(task: personalTaskForCell) }
+        set { allTimeLabel.text = "All Time: \(newValue) min" }
+    }
+    private var specificTime: Int64 {
+        get { timeSetterManaager.getSpecificTime(for: personalTaskForCell) }
+        set { timeForSelectedSegment.text = "Time today: \(newValue) minutes" }
+    }
     
     private let allTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "All time: "
         label.font = UIFont.boldSystemFont(ofSize: 25)
         return label
     }()
     private let statisticsDateSegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
+        segment.addTarget(self, action: #selector(chooseTimeFor(segment:)), for: .valueChanged)
         return segment
     }()
     private let timeForSelectedSegment: UILabel = {
         let label = UILabel()
-        label.text = "Time"
         label.font = UIFont.italicSystemFont(ofSize: 22)
         return label
     }()
@@ -32,19 +41,33 @@ class InformationForCellViewController: UIViewController {
         let button = UIButton()
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        button.addTarget(self, action: #selector(addLostTime), for: .touchUpInside)
         return button
     }()
     private let minusLostTimeButton: UIButton = {
         let button = UIButton()
         button.setTitle("-", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        button.addTarget(self, action: #selector(removeLostTime), for: .touchUpInside)
         return button
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        allTimeLabel.text = "All Time: \(allTime) min"
+        timeForSelectedSegment.text = "Time today: \(specificTime) minutes"
         view.backgroundColor = .systemRed
         settingNavigation()
         setupViews()
+    }
+    @objc func chooseTimeFor(segment: UISegmentedControl) {
+        specificTime = timeSetterManaager.getSpecificTime(for: personalTaskForCell,
+                                                          atSegmentFor: segment.selectedSegmentIndex)
+    }
+    @objc func addLostTime() {
+        editLostTimeAlert(title: "Add lost time", flag: "plus")
+    }
+    @objc func removeLostTime() {
+        editLostTimeAlert(title: "Remove lost time", flag: nil)
     }
     
     private func settingNavigation() {
@@ -135,6 +158,34 @@ extension InformationForCellViewController {
         alert.addAction(cancelAction)
         alert.addTextField { (text) in
             text.text = self.personalTaskForCell.name
+        }
+        present(alert, animated: true)
+    }
+    
+    private func editLostTimeAlert(title: String, flag: String?) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
+            guard let addTime = alert.textFields?.first?.text, !addTime.isEmpty else { return }
+            
+            switch flag {
+            case "plus":
+                self.allTime += Int64(addTime)!
+                self.specificTime += Int64(addTime)!
+                CoreDataManager.shared.updateTime(self.personalTaskForCell, newTime: (Int64(addTime) ?? 0) * 60 )
+            default:
+                self.allTime -= Int64(addTime)!
+                self.specificTime -= Int64(addTime)!
+                CoreDataManager.shared.updateTime(self.personalTaskForCell, newTime: -(Int64(addTime) ?? 0) * 60 )
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        alert.addTextField { (text) in
+            text.placeholder = "minutes"
+            text.keyboardType = .numberPad
         }
         present(alert, animated: true)
     }

@@ -7,14 +7,15 @@
 //
 
 import UIKit
+import Charts
 
 class BarChartStatiscticViewController: UIViewController {
     
-   private let statisticsDateSegmentedControl: UISegmentedControl = {
-           let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
-           return segment
-       }()
-
+    private let statisticsDateSegmentedControl: UISegmentedControl = {
+        let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
+        return segment
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,7 +26,7 @@ class BarChartStatiscticViewController: UIViewController {
     
     private func setUpNavigation() {
         navigationItem.title = "Bar Chart"
-
+        
         let backButton = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonAction))
         navigationItem.setLeftBarButton(backButton, animated: false)
     }

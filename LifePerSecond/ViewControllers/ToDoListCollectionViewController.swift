@@ -28,10 +28,10 @@ class ToDoListCollectionViewController: UICollectionViewController {
         let informationVC = InformationForCellViewController()
         
         informationVC.preparePersonalCellFor(task: toDoList[indexPath.item])
-                
+        
         present(UINavigationController(rootViewController: informationVC), animated: true)
     }
-        
+    
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return toDoList.count
@@ -40,8 +40,8 @@ class ToDoListCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DealForToDoListCollectionViewCell.reuseId,
                                                       for: indexPath) as! DealForToDoListCollectionViewCell
+        
         cell.preparePersonalCellFor(task: toDoList[indexPath.item])
-        //cell.setNameForCell(toDoList[indexPath.item].name ?? "error name")
         
         return cell
     }

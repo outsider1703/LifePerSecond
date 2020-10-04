@@ -13,7 +13,7 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
     static let reuseId = "Cell"
     
     private var personalTaskForCell: Task!
-        
+    
     private var timer: Timer?
     private var timerCounter: Int64 = 0 {
         didSet {

@@ -76,10 +76,10 @@ extension CoreDataManager {
     }
     
     func editName(_ task: Task, newName: String) {
-           task.name = newName
-           saveContext()
-       }
-//MARK:- {{{
+        task.name = newName
+        saveContext()
+    }
+    //MARK:- {{{
     func updateTime(_ task: Task, newTime: Int64) {
         
         let dateObject = TimeAndDate(context: viewContext)
@@ -92,7 +92,7 @@ extension CoreDataManager {
         
         saveContext()
     }
-//MARK:- }}} Переделать
+    //MARK:- }}} Переделать
     
 }
- 
+
