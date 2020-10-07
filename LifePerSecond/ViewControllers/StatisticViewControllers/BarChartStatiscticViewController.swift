@@ -9,10 +9,13 @@
 import UIKit
 import Charts
 
-class BarChartStatiscticViewController: UIViewController {
+class BarChartStatiscticViewController: UIViewController, ChartViewDelegate {
+    
+    var toDoList: [Task] = []
     
     private let statisticsDateSegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
+        segment.selectedSegmentIndex = 0
         return segment
     }()
     
@@ -20,6 +23,7 @@ class BarChartStatiscticViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBlue
+        setUpBarChartView()
         setUpNavigation()
         setupViews()
     }
@@ -33,6 +37,12 @@ class BarChartStatiscticViewController: UIViewController {
     @objc func backButtonAction() {
         dismiss(animated: true)
     }
+    
+    private func setUpBarChartView() {
+        //  pieChartView.delegate = self
+        
+    }
+    
     
     private func setupViews() {
         view.addSubview(statisticsDateSegmentedControl)

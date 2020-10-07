@@ -19,7 +19,7 @@ class TimeSetterManager {
         return allTime / 60
     }
 //MARK: - {{{
-    func getSpecificTime(for task: Task, atSegmentFor index: Int? = nil) -> Int64 {
+    func getSpecificTimeFor(_ task: Task, atSegmentFor index: Int? = nil) -> Int64 {
         var timeForSpecificDate: Int64 = 0
         
         guard let time = task.setTimeAndDate else { return 0 }

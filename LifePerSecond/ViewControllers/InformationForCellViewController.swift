@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Charts
 
-class InformationForCellViewController: UIViewController {
+class InformationForCellViewController: UIViewController, ChartViewDelegate {
     
+    private let entriesSetterManaager = EntriesDataManager()
     private let timeSetterManaager = TimeSetterManager()
     private var personalTaskForCell: Task!
     
@@ -18,8 +20,12 @@ class InformationForCellViewController: UIViewController {
         set { allTimeLabel.text = "All Time: \(newValue) min" }
     }
     private var specificTime: Int64 {
-        get { timeSetterManaager.getSpecificTime(for: personalTaskForCell) }
-        set { timeForSelectedSegment.text = "Time today: \(newValue) minutes" }
+        get { timeSetterManaager.getSpecificTimeFor(personalTaskForCell, atSegmentFor: 1) }
+        set { timeForSelectedSegment.text = "\(newValue) minutes" }
+    }
+    private var timeToday: Int64 {
+        get { timeSetterManaager.getSpecificTimeFor(personalTaskForCell) }
+        set { timeTodayLabel.text = "Time today: \(newValue) minutes" }
     }
     
     private let allTimeLabel: UILabel = {
@@ -27,8 +33,16 @@ class InformationForCellViewController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 25)
         return label
     }()
+    private let timeTodayLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Time Today: "
+        label.font = UIFont.italicSystemFont(ofSize: 22)
+        return label
+    }()
+    
     private let statisticsDateSegmentedControl: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
+        let segment = UISegmentedControl(items: ["Week", "Month", "Year"])
+        segment.selectedSegmentIndex = 0
         segment.addTarget(self, action: #selector(chooseTimeFor(segment:)), for: .valueChanged)
         return segment
     }()
@@ -37,6 +51,7 @@ class InformationForCellViewController: UIViewController {
         label.font = UIFont.italicSystemFont(ofSize: 22)
         return label
     }()
+    
     private let plusLostTimeButton: UIButton = {
         let button = UIButton()
         button.setTitle("+", for: .normal)
@@ -51,17 +66,32 @@ class InformationForCellViewController: UIViewController {
         button.addTarget(self, action: #selector(removeLostTime), for: .touchUpInside)
         return button
     }()
+    
+    private let barChartView: BarChartView = {
+        let barChart = BarChartView()
+        
+        return barChart
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        allTimeLabel.text = "All Time: \(allTime) min"
-        timeForSelectedSegment.text = "Time today: \(specificTime) minutes"
+        barChartView.delegate = self
+        barChartView.data = entriesSetterManaager.creatingAndReceivingEntrieFor(personalTaskForCell)
+        
         view.backgroundColor = .systemRed
+        setTimerLabels()
         settingNavigation()
         setupViews()
     }
     @objc func chooseTimeFor(segment: UISegmentedControl) {
-        specificTime = timeSetterManaager.getSpecificTime(for: personalTaskForCell,
-                                                          atSegmentFor: segment.selectedSegmentIndex)
+        specificTime = timeSetterManaager.getSpecificTimeFor(
+            personalTaskForCell,
+            atSegmentFor: segment.selectedSegmentIndex + 1
+        )
+        barChartView.data = entriesSetterManaager.creatingAndReceivingEntrieFor(
+            personalTaskForCell,
+            atSegment: segment.selectedSegmentIndex
+        )
     }
     @objc func addLostTime() {
         editLostTimeAlert(title: "Add lost time", flag: "plus")
@@ -70,67 +100,6 @@ class InformationForCellViewController: UIViewController {
         editLostTimeAlert(title: "Remove lost time", flag: nil)
     }
     
-    private func settingNavigation() {
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.barTintColor = .black
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white,
-                                                                   .font: UIFont.boldSystemFont(ofSize: 20)]
-        
-        let editButton = UIBarButtonItem(barButtonSystemItem: .edit,
-                                         target: self,
-                                         action: #selector(editInformation))
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .close,
-                                           target: self,
-                                           action: #selector(deleteTask))
-        navigationItem.setRightBarButtonItems([deleteButton, editButton], animated: false)
-        let backButton = UIBarButtonItem(title: "Back",
-                                         style: .done,
-                                         target: self,
-                                         action: #selector(backButtonAction))
-        navigationItem.setLeftBarButton(backButton, animated: false)
-    }
-    @objc func deleteTask() {
-        CoreDataManager.shared.delete(personalTaskForCell)
-    }
-    @objc func editInformation() {
-        editInfoAlert(title: "Edit Name")
-    }
-    @objc func backButtonAction() {
-        dismiss(animated: true)
-    }
-    
-    private func setupViews() {
-        view.addSubview(allTimeLabel)
-        allTimeLabel.snp.makeConstraints { (make) in
-            make.size.equalTo(CGSize(width: view.frame.width - 128 , height: view.frame.height / 15))
-            make.top.equalToSuperview().offset(64)
-            make.leading.equalTo(view).offset(8)
-        }
-        view.addSubview(statisticsDateSegmentedControl)
-        statisticsDateSegmentedControl.snp.makeConstraints { (make) in
-            make.top.equalTo(allTimeLabel.snp.bottom).offset(8)
-            make.leading.equalTo(8)
-            make.trailing.equalTo(-8)
-        }
-        view.addSubview(timeForSelectedSegment)
-        timeForSelectedSegment.snp.makeConstraints { (make) in
-            make.top.equalTo(statisticsDateSegmentedControl.snp.bottom).offset(8)
-            make.leading.equalTo(8)
-            make.trailing.equalTo(-8)
-        }
-        view.addSubview(plusLostTimeButton)
-        plusLostTimeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(64)
-            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
-            make.trailing.equalTo(view).offset(-8)
-        }
-        view.addSubview(minusLostTimeButton)
-        minusLostTimeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(64)
-            make.trailing.equalTo(plusLostTimeButton.snp.leading).offset(0)
-            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
-        }
-    }
 }
 //MARK:- Puplic Function for Setting UI
 extension InformationForCellViewController {
@@ -170,12 +139,14 @@ extension InformationForCellViewController {
             
             switch flag {
             case "plus":
-                self.allTime += Int64(addTime)!
-                self.specificTime += Int64(addTime)!
+                self.allTime += Int64(addTime) ?? 0
+                self.specificTime += Int64(addTime) ?? 0
+                self.timeToday += Int64(addTime) ?? 0
                 CoreDataManager.shared.updateTime(self.personalTaskForCell, newTime: (Int64(addTime) ?? 0) * 60 )
             default:
-                self.allTime -= Int64(addTime)!
-                self.specificTime -= Int64(addTime)!
+                self.allTime -= Int64(addTime) ?? 0
+                self.specificTime -= Int64(addTime) ?? 0
+                self.timeToday -= Int64(addTime) ?? 0
                 CoreDataManager.shared.updateTime(self.personalTaskForCell, newTime: -(Int64(addTime) ?? 0) * 60 )
             }
         }
@@ -189,5 +160,83 @@ extension InformationForCellViewController {
         }
         present(alert, animated: true)
     }
+}
+//MARK: - Set Up Views and Navigation Controller
+extension InformationForCellViewController {
+    private func setTimerLabels() {
+        allTimeLabel.text = "All Time: \(allTime) min"
+        timeForSelectedSegment.text = "\(specificTime) minutes"
+        timeTodayLabel.text = "Time today: \(timeToday) minutes"
+    }
+    private func settingNavigation() {
+        navigationController?.navigationBar.backgroundColor = .black
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white,
+                                                                   .font: UIFont.boldSystemFont(ofSize: 20)]
+        
+        let editButton = UIBarButtonItem(barButtonSystemItem: .edit,
+                                         target: self,
+                                         action: #selector(editInformation))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .close,
+                                           target: self,
+                                           action: #selector(deleteTask))
+        navigationItem.setRightBarButtonItems([deleteButton, editButton], animated: false)
+        let backButton = UIBarButtonItem(title: "Back",
+                                         style: .done,
+                                         target: self,
+                                         action: #selector(backButtonAction))
+        navigationItem.setLeftBarButton(backButton, animated: false)
+    }
+    @objc func deleteTask() {
+        CoreDataManager.shared.delete(personalTaskForCell)
+    }
+    @objc func editInformation() {
+        editInfoAlert(title: "Edit Name")
+    }
+    @objc func backButtonAction() {
+        dismiss(animated: true)
+    }
     
+    private func setupViews() {
+        view.addSubview(allTimeLabel)
+        allTimeLabel.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(64)
+            make.leading.equalTo(view).offset(8)
+        }
+        view.addSubview(timeTodayLabel)
+        timeTodayLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(allTimeLabel.snp.bottom).offset(8)
+            make.leading.equalTo(8)
+        }
+        view.addSubview(statisticsDateSegmentedControl)
+        statisticsDateSegmentedControl.snp.makeConstraints { (make) in
+            make.top.equalTo(timeTodayLabel.snp.bottom).offset(8)
+            make.leading.equalTo(8)
+            make.trailing.equalTo(-8)
+        }
+        view.addSubview(timeForSelectedSegment)
+        timeForSelectedSegment.snp.makeConstraints { (make) in
+            make.top.equalTo(statisticsDateSegmentedControl.snp.bottom).offset(8)
+            make.leading.equalTo(8)
+            make.trailing.equalTo(-8)
+        }
+        view.addSubview(plusLostTimeButton)
+        plusLostTimeButton.snp.makeConstraints { (make) in
+            make.top.equalTo(view).offset(64)
+            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
+            make.trailing.equalTo(view).offset(-8)
+        }
+        view.addSubview(minusLostTimeButton)
+        minusLostTimeButton.snp.makeConstraints { (make) in
+            make.top.equalTo(view).offset(64)
+            make.trailing.equalTo(plusLostTimeButton.snp.leading).offset(0)
+            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
+        }
+        view.addSubview(barChartView)
+        barChartView.snp.makeConstraints { (make) in
+            make.center.equalTo(view)
+            make.size.equalTo(CGSize(width: view.frame.width,
+                                     height: view.frame.width ))
+        }
+    }
 }
