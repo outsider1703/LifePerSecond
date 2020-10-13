@@ -1,0 +1,6 @@
+framework module Pods_LifePerSecond {
+  umbrella header "Pods-LifePerSecond-umbrella.h"
+
+  export *
+  module * { export * }
+}
