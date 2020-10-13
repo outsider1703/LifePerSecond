@@ -14,12 +14,12 @@ class ToDoListCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemPink
         collectionView.register(DealForToDoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DealForToDoListCollectionViewCell.reuseId)
+        
         settingNavigation()
         toDoList = CoreDataManager.shared.fetchData()
     }
@@ -40,8 +40,9 @@ class ToDoListCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DealForToDoListCollectionViewCell.reuseId,
                                                       for: indexPath) as! DealForToDoListCollectionViewCell
-        
-        cell.preparePersonalCellFor(task: toDoList[indexPath.item])
+       
+        let startDate = UserDefaults.standard.object(forKey: toDoList[indexPath.item].name!) as? Date
+        cell.preparePersonalCellFor(task: toDoList[indexPath.item], and: startDate)
         
         return cell
     }

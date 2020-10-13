@@ -69,6 +69,19 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
     
     private let barChartView: BarChartView = {
         let barChart = BarChartView()
+        barChart.rightAxis.enabled = false
+        barChart.setScaleEnabled(false)
+        barChart.legend.enabled = false
+        
+        barChart.leftAxis.labelFont = .boldSystemFont(ofSize: 12)
+        barChart.leftAxis.axisLineColor = .black
+        barChart.leftAxis.drawGridLinesEnabled = false
+        barChart.leftAxis.axisMinimum = 0
+        
+        barChart.xAxis.labelPosition = .bottom
+        barChart.xAxis.labelFont = .boldSystemFont(ofSize: 12)
+        barChart.xAxis.axisLineColor = .black
+        // barChart.xAxis.drawGridLinesEnabled = false
         
         return barChart
     }()
@@ -83,6 +96,7 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
         settingNavigation()
         setupViews()
     }
+    
     @objc func chooseTimeFor(segment: UISegmentedControl) {
         specificTime = timeSetterManaager.getSpecificTimeFor(
             personalTaskForCell,
@@ -122,12 +136,15 @@ extension InformationForCellViewController {
             self.navigationItem.title = newName
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] _ in
+            CoreDataManager.shared.delete(self.personalTaskForCell)
+        }
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         alert.addTextField { (text) in
             text.text = self.personalTaskForCell.name
         }
+        alert.addAction(deleteAction)
         present(alert, animated: true)
     }
     
@@ -177,18 +194,12 @@ extension InformationForCellViewController {
         let editButton = UIBarButtonItem(barButtonSystemItem: .edit,
                                          target: self,
                                          action: #selector(editInformation))
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .close,
-                                           target: self,
-                                           action: #selector(deleteTask))
-        navigationItem.setRightBarButtonItems([deleteButton, editButton], animated: false)
+        navigationItem.setRightBarButton(editButton, animated: false)
         let backButton = UIBarButtonItem(title: "Back",
                                          style: .done,
                                          target: self,
                                          action: #selector(backButtonAction))
         navigationItem.setLeftBarButton(backButton, animated: false)
-    }
-    @objc func deleteTask() {
-        CoreDataManager.shared.delete(personalTaskForCell)
     }
     @objc func editInformation() {
         editInfoAlert(title: "Edit Name")

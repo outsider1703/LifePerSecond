@@ -11,7 +11,6 @@ import Charts
 class EntriesDataManager  {
     
     private let calendar = Calendar.current
-    
     private let timeSetterManaager = TimeSetterManager()
     
     //MARK: - Creating & Receiving Entrie For All Pie
@@ -22,7 +21,7 @@ class EntriesDataManager  {
         for task in tasks {
             let timeForSpecificDate = timeSetterManaager.getSpecificTimeFor(task, atSegmentFor: index)
             
-            let entrie = PieChartDataEntry(value: Double(timeForSpecificDate), label: "\(task.name!)")
+            let entrie = PieChartDataEntry(value: Double(timeForSpecificDate), label: "\(task.name ?? "")")
             if entrie.value > 0 {
                 pieChartEntries.append(entrie)
             }
@@ -55,16 +54,15 @@ class EntriesDataManager  {
         
         guard let taskObject = task.setTimeAndDate else { return nil }
         guard let dictionaryBarChartEntries = getEntryDictionary(from: taskObject) else { return nil }
-        
         switch index {
         case 1:
-            let rangeOfMonth = calendar.range(of: .day, in: .month, for: Date())
-            barChartEntries = getListOfDaysIn(range: rangeOfMonth!, from: dictionaryBarChartEntries)
+            guard let rangeOfMonth = calendar.range(of: .day, in: .month, for: Date()) else { return nil }
+            barChartEntries = getListOfDaysIn(range: rangeOfMonth, from: dictionaryBarChartEntries)
         case 2:
             barChartEntries = getEntrieForYearFrom(entriesDictionary: dictionaryBarChartEntries)
         default:
-            let rangeOfWeek = calendar.range(of: .day, in: .weekOfMonth, for: Date())
-            barChartEntries = getListOfDaysIn(range: rangeOfWeek!, from: dictionaryBarChartEntries)
+            guard let rangeOfWeek = calendar.range(of: .day, in: .weekOfMonth, for: Date()) else { return nil }
+            barChartEntries = getListOfDaysIn(range: rangeOfWeek, from: dictionaryBarChartEntries)
         }
         
         let dataSet = creatingAndReceivingSet(entries: barChartEntries)
@@ -75,7 +73,6 @@ class EntriesDataManager  {
     
     private func creatingAndReceivingSet(entries: [BarChartDataEntry]?) -> BarChartDataSet {
         let setForDataChart = BarChartDataSet(entries: entries, label: nil)
-        
         setForDataChart.colors = ChartColorTemplates.pastel()
         
         return setForDataChart
@@ -83,10 +80,11 @@ class EntriesDataManager  {
     
     private func creatingAndReceivingData(set: BarChartDataSet) -> BarChartData {
         let dataForCharts = BarChartData(dataSet: set)
+        //dataForCharts.setDrawValues(false)
         
         return dataForCharts
     }
-    
+    //MARK: - {{{
     private func getEntryDictionary(from taskObject: NSOrderedSet) -> [String: Double]? {
         var dictionaryBarChartEntries = [String: Double]()
         
@@ -96,22 +94,23 @@ class EntriesDataManager  {
         var valueForEntrie = 0.0
         
         for dataElement in taskObject {
-            let timeDataObject = dataElement as? TimeAndDate
-            let dateCompForTimeDataObject = calendar.dateComponents([.day, .month, .year], from: (timeDataObject?.date)!)
+            guard let timeDataObject = dataElement as? TimeAndDate else { return nil }
+            let dateCompForTimeDataObject = calendar.dateComponents([.day, .month, .year], from: timeDataObject.date ?? Date())
             
             if auxiliaryDate == nil {
-                auxiliaryDate = calendar.dateComponents([.day, .month, .year], from: (timeDataObject?.date)!)
-                dayOnMonth = dateFormatorFor(date: (timeDataObject?.date)!)
+                auxiliaryDate = calendar.dateComponents([.day, .month, .year], from: timeDataObject.date ?? Date())
+                dayOnMonth = dateFormatorFor(date: timeDataObject.date ?? Date())
             }
             
             if dateCompForTimeDataObject == auxiliaryDate  {
-                valueForEntrie += Double(timeDataObject!.timeCounter)
+                valueForEntrie += Double(timeDataObject.timeCounter)
             } else {
-                dictionaryBarChartEntries[dayOnMonth!] = valueForEntrie / 60
-                auxiliaryDate = nil
-                valueForEntrie = Double(timeDataObject!.timeCounter)
+                dictionaryBarChartEntries[dayOnMonth ?? "Key Error"] = valueForEntrie / 60
+                auxiliaryDate = calendar.dateComponents([.day, .month, .year], from: timeDataObject.date ?? Date())
+                dayOnMonth = dateFormatorFor(date: timeDataObject.date ?? Date())
+                valueForEntrie = Double(timeDataObject.timeCounter)
             }
-            lastDateOnMonth = timeDataObject?.date
+            lastDateOnMonth = timeDataObject.date
         }
         guard let lastDayOnMonth = dateFormatorFor(date: lastDateOnMonth) else { return nil}
         dictionaryBarChartEntries[lastDayOnMonth] = valueForEntrie / 60
@@ -126,7 +125,7 @@ class EntriesDataManager  {
         
         return dayOnMonth
     }
-    
+    //MARK: - }}} - Это все конечно же нужно как то по божески сделать, пока просто работает
     private func getListOfDaysIn(range: CountableRange<Int>, from entriesDictionary: [String : Double]) -> [BarChartDataEntry] {
         var barChartEntries = [BarChartDataEntry]()
         
@@ -154,12 +153,12 @@ class EntriesDataManager  {
         return customDate
     }
     
-    private func getEntrieForYearFrom(entriesDictionary: [String : Double]) -> [BarChartDataEntry] {
+    private func getEntrieForYearFrom(entriesDictionary: [String : Double]) -> [BarChartDataEntry]? {
         var barChartEntries = [BarChartDataEntry]()
         
-        let rangeOfYear = calendar.range(of: .month, in: .year, for: Date())
+        guard let rangeOfYear = calendar.range(of: .month, in: .year, for: Date()) else { return nil }
         
-        for month in rangeOfYear! {
+        for month in rangeOfYear {
             barChartEntries.append(compareFor(month: month, entriesDictionary: entriesDictionary))
         }
         return barChartEntries

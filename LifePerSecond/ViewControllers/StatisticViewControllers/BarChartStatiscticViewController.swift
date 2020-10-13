@@ -18,12 +18,30 @@ class BarChartStatiscticViewController: UIViewController, ChartViewDelegate {
         segment.selectedSegmentIndex = 0
         return segment
     }()
+    private let barChartView: BarChartView = {
+        let barChart = BarChartView()
+        barChart.rightAxis.enabled = false
+        barChart.setScaleEnabled(false)
+        barChart.legend.enabled = false
+        
+        barChart.leftAxis.labelFont = .boldSystemFont(ofSize: 12)
+        barChart.leftAxis.axisLineColor = .black
+        barChart.leftAxis.drawGridLinesEnabled = false
+        barChart.leftAxis.axisMinimum = 0
+        
+        barChart.xAxis.labelPosition = .bottom
+        barChart.xAxis.labelFont = .boldSystemFont(ofSize: 12)
+        barChart.xAxis.axisLineColor = .black
+        // barChart.xAxis.drawGridLinesEnabled = false
+        
+        return barChart
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        barChartView.delegate = self
+
         view.backgroundColor = .systemBlue
-        setUpBarChartView()
         setUpNavigation()
         setupViews()
     }
@@ -37,19 +55,19 @@ class BarChartStatiscticViewController: UIViewController, ChartViewDelegate {
     @objc func backButtonAction() {
         dismiss(animated: true)
     }
-    
-    private func setUpBarChartView() {
-        //  pieChartView.delegate = self
-        
-    }
-    
-    
+
     private func setupViews() {
         view.addSubview(statisticsDateSegmentedControl)
         statisticsDateSegmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(98)
             make.leading.equalTo(8)
             make.trailing.equalTo(-8)
+        }
+        view.addSubview(barChartView)
+        barChartView.snp.makeConstraints { (make) in
+            make.center.equalTo(view)
+            make.size.equalTo(CGSize(width: view.frame.width,
+                                     height: view.frame.width ))
         }
     }
 }

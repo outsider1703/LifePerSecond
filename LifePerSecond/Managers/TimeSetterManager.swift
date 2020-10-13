@@ -5,7 +5,7 @@
 //  Created by Macbook on 04.10.2020.
 //  Copyright © 2020 Igor Simonov. All rights reserved.
 //
-import UIKit
+import Foundation
 
 class TimeSetterManager {
     
@@ -32,16 +32,16 @@ class TimeSetterManager {
             
             switch index {
             case 1:
-                dateComponentsForObject = calendar.dateComponents([.weekOfMonth, .month, .year], from: (timeDataOmbject?.date)!)
+                dateComponentsForObject = calendar.dateComponents([.weekOfMonth, .month, .year], from: timeDataOmbject?.date ?? Date())
                 dateComponentsForDate = calendar.dateComponents([.weekOfMonth, .month, .year], from: (Date()))
             case 2:
-                dateComponentsForObject = calendar.dateComponents([.month, .year], from: (timeDataOmbject?.date)!)
+                dateComponentsForObject = calendar.dateComponents([.month, .year], from: timeDataOmbject?.date ?? Date())
                 dateComponentsForDate = calendar.dateComponents([.month, .year], from: (Date()))
             case 3:
-                dateComponentsForObject = calendar.dateComponents([.year], from: (timeDataOmbject?.date)!)
+                dateComponentsForObject = calendar.dateComponents([.year], from: timeDataOmbject?.date ?? Date())
                 dateComponentsForDate = calendar.dateComponents([.year], from: (Date()))
             default:
-                dateComponentsForObject = calendar.dateComponents([.day, .month, .year], from: (timeDataOmbject?.date)!)
+                dateComponentsForObject = calendar.dateComponents([.day, .month, .year], from: timeDataOmbject?.date ?? Date())
                 dateComponentsForDate = calendar.dateComponents([.day, .month, .year], from: (Date()))
             }
             

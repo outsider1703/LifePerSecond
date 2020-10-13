@@ -16,9 +16,12 @@ class PieChartStatisticViewController: UIViewController, ChartViewDelegate {
     
     private let pieChartView: PieChartView = {
         let pieChart = PieChartView()
+        pieChart.legend.enabled = false
+        
         pieChart.holeRadiusPercent = 0.3
         pieChart.transparentCircleRadiusPercent = 0.1
         pieChart.centerText = "Minuts"
+        
         return pieChart
     }()
     
