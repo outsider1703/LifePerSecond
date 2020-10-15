@@ -41,8 +41,8 @@ class PieChartStatisticViewController: UIViewController, ChartViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         toDoList = CoreDataManager.shared.fetchData()
+        view.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
 
-        view.backgroundColor = .systemYellow
         setUpPieChartView()
         setUpNavigation()
         setupViews()
@@ -52,6 +52,7 @@ class PieChartStatisticViewController: UIViewController, ChartViewDelegate {
         navigationItem.title = "Pie Chart"
         
         let backButton = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonAction))
+        backButton.tintColor = .white
         navigationItem.setLeftBarButton(backButton, animated: false)
     }
     @objc func backButtonAction() {

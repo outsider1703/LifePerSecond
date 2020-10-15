@@ -74,7 +74,6 @@ class EntriesDataManager  {
     private func creatingAndReceivingSet(entries: [BarChartDataEntry]?) -> BarChartDataSet {
         let setForDataChart = BarChartDataSet(entries: entries, label: nil)
         setForDataChart.colors = ChartColorTemplates.pastel()
-        
         return setForDataChart
     }
     

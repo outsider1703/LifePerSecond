@@ -41,15 +41,16 @@ class BarChartStatiscticViewController: UIViewController, ChartViewDelegate {
         super.viewDidLoad()
         barChartView.delegate = self
 
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
         setUpNavigation()
         setupViews()
     }
     
     private func setUpNavigation() {
         navigationItem.title = "Bar Chart"
-        
+
         let backButton = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(backButtonAction))
+        backButton.tintColor = .white
         navigationItem.setLeftBarButton(backButton, animated: false)
     }
     @objc func backButtonAction() {

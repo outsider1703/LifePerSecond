@@ -16,7 +16,7 @@ class ToDoListCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .systemPink
+        collectionView.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
         collectionView.register(DealForToDoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DealForToDoListCollectionViewCell.reuseId)
         
@@ -40,7 +40,7 @@ class ToDoListCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DealForToDoListCollectionViewCell.reuseId,
                                                       for: indexPath) as! DealForToDoListCollectionViewCell
-       
+        
         let startDate = UserDefaults.standard.object(forKey: toDoList[indexPath.item].name!) as? Date
         cell.preparePersonalCellFor(task: toDoList[indexPath.item], and: startDate)
         
@@ -69,9 +69,12 @@ class ToDoListCollectionViewController: UICollectionViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                            target: self,
-                                                            action: #selector(addNewDeal))
+        let barButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addNewDeal))
+        barButton.tintColor = .white
+        navigationItem.rightBarButtonItem = barButton
+        
     }
     @objc func addNewDeal() {
         addNewDealAlert(title: "New Goals")

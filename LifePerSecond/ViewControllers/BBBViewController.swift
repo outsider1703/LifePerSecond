@@ -31,7 +31,7 @@ class BigBlackButtonViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
         
         addSubview()
     }
@@ -46,14 +46,22 @@ class BigBlackButtonViewController: UIViewController {
         present(UINavigationController(rootViewController: toDoVC), animated: true)
     }
     @objc func goToStatisticsVC() {
-        let tapBarVC = UITabBarController()
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundColor = .black
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         let pieChart = UINavigationController(rootViewController: PieChartStatisticViewController())
-        let barChart = UINavigationController(rootViewController: BarChartStatiscticViewController()) 
+        let barChart = UINavigationController(rootViewController: BarChartStatiscticViewController())
         
         pieChart.title = "Pie"
         barChart.title = "Bar"
         
+        pieChart.navigationBar.standardAppearance = navBarAppearance
+        barChart.navigationBar.standardAppearance = navBarAppearance
+        
+        let tapBarVC = UITabBarController()
+        tapBarVC.tabBar.barTintColor = .black
+        tapBarVC.tabBar.tintColor = .white
         tapBarVC.setViewControllers([pieChart, barChart], animated: false)
         
         guard let items = tapBarVC.tabBar.items else { return }

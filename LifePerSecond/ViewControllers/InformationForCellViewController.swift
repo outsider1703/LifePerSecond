@@ -21,7 +21,7 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
     }
     private var specificTime: Int64 {
         get { timeSetterManaager.getSpecificTimeFor(personalTaskForCell, atSegmentFor: 1) }
-        set { timeForSelectedSegment.text = "\(newValue) minutes" }
+        set { timeForSegmentIndexLabel.text = "\(newValue) min" }
     }
     private var timeToday: Int64 {
         get { timeSetterManaager.getSpecificTimeFor(personalTaskForCell) }
@@ -39,6 +39,12 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
         label.font = UIFont.italicSystemFont(ofSize: 22)
         return label
     }()
+    private let lostTimeLabel: UILabel = {
+          let label = UILabel()
+        label.text = "Edit lost time"
+          label.font = UIFont.italicSystemFont(ofSize: 20)
+          return label
+      }()
     
     private let statisticsDateSegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Week", "Month", "Year"])
@@ -46,7 +52,7 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
         segment.addTarget(self, action: #selector(chooseTimeFor(segment:)), for: .valueChanged)
         return segment
     }()
-    private let timeForSelectedSegment: UILabel = {
+    private let timeForSegmentIndexLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.italicSystemFont(ofSize: 22)
         return label
@@ -91,7 +97,7 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
         barChartView.delegate = self
         barChartView.data = entriesSetterManaager.creatingAndReceivingEntrieFor(personalTaskForCell)
         
-        view.backgroundColor = .systemRed
+        view.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
         setTimerLabels()
         settingNavigation()
         setupViews()
@@ -106,6 +112,7 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
             personalTaskForCell,
             atSegment: segment.selectedSegmentIndex
         )
+        setTextAlignmentForSpecificTime(segment: segment.selectedSegmentIndex)
     }
     @objc func addLostTime() {
         editLostTimeAlert(title: "Add lost time", flag: "plus")
@@ -182,23 +189,32 @@ extension InformationForCellViewController {
 extension InformationForCellViewController {
     private func setTimerLabels() {
         allTimeLabel.text = "All Time: \(allTime) min"
-        timeForSelectedSegment.text = "\(specificTime) minutes"
         timeTodayLabel.text = "Time today: \(timeToday) minutes"
+        timeForSegmentIndexLabel.text = "\(specificTime) min"
     }
+    private func setTextAlignmentForSpecificTime(segment: Int) {
+        switch segment {
+        case 1: timeForSegmentIndexLabel.textAlignment = .center
+        case 2: timeForSegmentIndexLabel.textAlignment = .right
+        default: timeForSegmentIndexLabel.textAlignment = .left
+        }
+    }
+    
     private func settingNavigation() {
         navigationController?.navigationBar.backgroundColor = .black
         navigationController?.navigationBar.barTintColor = .black
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white,
                                                                    .font: UIFont.boldSystemFont(ofSize: 20)]
-        
         let editButton = UIBarButtonItem(barButtonSystemItem: .edit,
                                          target: self,
                                          action: #selector(editInformation))
+        editButton.tintColor = .white
         navigationItem.setRightBarButton(editButton, animated: false)
         let backButton = UIBarButtonItem(title: "Back",
                                          style: .done,
                                          target: self,
                                          action: #selector(backButtonAction))
+        backButton.tintColor = .white
         navigationItem.setLeftBarButton(backButton, animated: false)
     }
     @objc func editInformation() {
@@ -225,27 +241,33 @@ extension InformationForCellViewController {
             make.leading.equalTo(8)
             make.trailing.equalTo(-8)
         }
-        view.addSubview(timeForSelectedSegment)
-        timeForSelectedSegment.snp.makeConstraints { (make) in
+        view.addSubview(timeForSegmentIndexLabel)
+        timeForSegmentIndexLabel.snp.makeConstraints { (make) in
             make.top.equalTo(statisticsDateSegmentedControl.snp.bottom).offset(8)
             make.leading.equalTo(8)
             make.trailing.equalTo(-8)
         }
+        view.addSubview(lostTimeLabel)
+        lostTimeLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(view).offset(64)
+            make.trailing.equalTo(view).offset(-8)
+        }
         view.addSubview(plusLostTimeButton)
         plusLostTimeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(64)
-            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
-            make.trailing.equalTo(view).offset(-8)
+            make.top.equalTo(lostTimeLabel.snp.bottom).offset(0)
+            make.trailing.equalTo(view).offset(-16)
+            make.size.equalTo(CGSize(width: 50, height: 40))
         }
         view.addSubview(minusLostTimeButton)
         minusLostTimeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(64)
+            make.top.equalTo(lostTimeLabel.snp.bottom).offset(0)
             make.trailing.equalTo(plusLostTimeButton.snp.leading).offset(0)
-            make.size.equalTo(CGSize(width: view.frame.height / 15, height: view.frame.height / 15))
+            make.size.equalTo(CGSize(width: 50, height: 40))
         }
         view.addSubview(barChartView)
         barChartView.snp.makeConstraints { (make) in
-            make.center.equalTo(view)
+            make.top.equalTo(timeForSegmentIndexLabel.snp.bottom).offset(8)
+            make.leading.equalTo(view).offset(0)
             make.size.equalTo(CGSize(width: view.frame.width,
                                      height: view.frame.width ))
         }

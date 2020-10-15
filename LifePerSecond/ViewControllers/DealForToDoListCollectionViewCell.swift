@@ -34,12 +34,14 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
     private let startButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("START", for: .normal)
+        button.tintColor = .white
         button.addTarget(self, action: #selector(startButtonAction), for: .touchUpInside)
         return button
     }()
     private let stopButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("STOP", for: .normal)
+        button.tintColor = .white
         button.addTarget(self, action: #selector(stopButtonAction), for: .touchUpInside)
         return button
     }()
@@ -71,7 +73,7 @@ class DealForToDoListCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setUpViews()
         stopButton.isHidden = true
-        
+        backgroundColor = UIColor(red: 128/255, green: 0/255, blue: 0/255, alpha: 1)
     }
     
     override func prepareForReuse() {
