@@ -46,8 +46,6 @@ class EntriesDataManager  {
         return dataForCharts
     }
     
-    //MARK: - Creating & Receiving Entrie For All Bar
-    
     //MARK: - Creating & Receiving Entrie For Information Bar
     func creatingAndReceivingEntrieFor(_ task: Task, atSegment index: Int? = nil) -> BarChartData? {
         var barChartEntries: [BarChartDataEntry]? = []
@@ -64,10 +62,9 @@ class EntriesDataManager  {
             guard let rangeOfWeek = calendar.range(of: .day, in: .weekOfMonth, for: Date()) else { return nil }
             barChartEntries = getListOfDaysIn(range: rangeOfWeek, from: dictionaryBarChartEntries)
         }
-        
         let dataSet = creatingAndReceivingSet(entries: barChartEntries)
         let dataForCharts = creatingAndReceivingData(set: dataSet)
-        
+
         return dataForCharts
     }
     
@@ -79,7 +76,7 @@ class EntriesDataManager  {
     
     private func creatingAndReceivingData(set: BarChartDataSet) -> BarChartData {
         let dataForCharts = BarChartData(dataSet: set)
-        //dataForCharts.setDrawValues(false)
+        dataForCharts.setDrawValues(false)
         
         return dataForCharts
     }
@@ -180,4 +177,6 @@ class EntriesDataManager  {
         }
         return BarChartDataEntry(x: Double(month), y: summForEntrie)
     }
+    
+    //MARK: - Creating & Receiving Entrie For All Bar
 }

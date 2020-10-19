@@ -40,6 +40,7 @@ class BarChartStatiscticViewController: UIViewController, ChartViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         barChartView.delegate = self
+      //  toDoList = CoreDataManager.shared.fetchData()
 
         view.backgroundColor = UIColor(red: 128/255, green: 24/255, blue: 24/255, alpha: 1)
         setUpNavigation()

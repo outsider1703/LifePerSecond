@@ -20,8 +20,9 @@ class ToDoListCollectionViewController: UICollectionViewController {
         collectionView.register(DealForToDoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DealForToDoListCollectionViewCell.reuseId)
         
-        settingNavigation()
         toDoList = CoreDataManager.shared.fetchData()
+        settingNavigation()
+        checkingToDoList()
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -77,7 +78,12 @@ class ToDoListCollectionViewController: UICollectionViewController {
         
     }
     @objc func addNewDeal() {
-        addNewDealAlert(title: "New Goals")
+        addNewDealAlert(title: "Add New Goals", massage: "Add the goal you want to achieve!")
+    }
+    private func checkingToDoList() {
+        if toDoList.count == 0 {
+            addNewDealAlert(title: "Add New Goals", massage: "Add the goal you want to achieve!")
+        }
     }
     
 }
@@ -85,8 +91,8 @@ class ToDoListCollectionViewController: UICollectionViewController {
 //MARK: - Alert
 extension ToDoListCollectionViewController {
     
-    private func addNewDealAlert(title: String) {
-        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+    private func addNewDealAlert(title: String, massage: String?) {
+        let alert = UIAlertController(title: title, message: massage, preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Achieve This", style: .default) { [unowned self] _ in
             guard let task = alert.textFields?.first?.text, !task.isEmpty else { return }

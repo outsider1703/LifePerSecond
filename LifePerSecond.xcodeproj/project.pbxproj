@@ -19,6 +19,7 @@
 		FA74B9F4251E5F0A001A3616 /* PieChartStatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F3251E5F0A001A3616 /* PieChartStatisticViewController.swift */; };
 		FA74B9F6252221F4001A3616 /* InformationForCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F5252221F4001A3616 /* InformationForCellViewController.swift */; };
 		FA74B9F82524618D001A3616 /* ToDoListCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA74B9F72524618D001A3616 /* ToDoListCollectionViewController.swift */; };
+		FA864E9B253B27BD00B9CE54 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA864E9A253B27BD00B9CE54 /* Marker.swift */; };
 		FA9229B525292FDA000EF62F /* TimeSetterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9229B425292FDA000EF62F /* TimeSetterManager.swift */; };
 		FA9229B7252930F6000EF62F /* EntriesDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9229B6252930F6000EF62F /* EntriesDataManager.swift */; };
 		FACE951225267AE300ECDF83 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE951125267AE300ECDF83 /* CoreDataManager.swift */; };
@@ -41,6 +42,7 @@
 		FA74B9F3251E5F0A001A3616 /* PieChartStatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartStatisticViewController.swift; sourceTree = "<group>"; };
 		FA74B9F5252221F4001A3616 /* InformationForCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationForCellViewController.swift; sourceTree = "<group>"; };
 		FA74B9F72524618D001A3616 /* ToDoListCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListCollectionViewController.swift; sourceTree = "<group>"; };
+		FA864E9A253B27BD00B9CE54 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		FA9229B425292FDA000EF62F /* TimeSetterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSetterManager.swift; sourceTree = "<group>"; };
 		FA9229B6252930F6000EF62F /* EntriesDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesDataManager.swift; sourceTree = "<group>"; };
 		FACE951125267AE300ECDF83 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				FA7169532519500500A83ECB /* Assets.xcassets */,
 				FA7169552519500500A83ECB /* LaunchScreen.storyboard */,
 				FA7169582519500500A83ECB /* Info.plist */,
+				FA864E9A253B27BD00B9CE54 /* Marker.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				FA71695225194FFE00A83ECB /* LifePerSecondData.xcdatamodeld in Sources */,
 				FA9229B525292FDA000EF62F /* TimeSetterManager.swift in Sources */,
 				FA71694825194FFE00A83ECB /* AppDelegate.swift in Sources */,
+				FA864E9B253B27BD00B9CE54 /* Marker.swift in Sources */,
 				FA74B9F6252221F4001A3616 /* InformationForCellViewController.swift in Sources */,
 				FA71694A25194FFE00A83ECB /* SceneDelegate.swift in Sources */,
 				FACE951225267AE300ECDF83 /* CoreDataManager.swift in Sources */,

@@ -101,7 +101,7 @@ class BigBlackButtonViewController: UIViewController {
     
     private func setCornerRadiusForButtons() {
         bigBlackButton.layer.cornerRadius = (view.frame.width / 4)
-        statisticsButton.layer.cornerRadius = (view.frame.width / 4) / 2
+        statisticsButton.layer.cornerRadius = (view.frame.width / 8)
     }
     
 }

@@ -87,7 +87,15 @@ class InformationForCellViewController: UIViewController, ChartViewDelegate {
         barChart.xAxis.labelPosition = .bottom
         barChart.xAxis.labelFont = .boldSystemFont(ofSize: 12)
         barChart.xAxis.axisLineColor = .black
-        // barChart.xAxis.drawGridLinesEnabled = false
+
+        let marker = XYMarkerView(color: UIColor(white: 180/250, alpha: 1),
+                                  font: .systemFont(ofSize: 12),
+                                  textColor: .black,
+                                  insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8),
+                                  xAxisValueFormatter: barChart.xAxis.valueFormatter!)
+        marker.chartView = barChart
+        marker.minimumSize = CGSize(width: 80, height: 40)
+        barChart.marker = marker
         
         return barChart
     }()
